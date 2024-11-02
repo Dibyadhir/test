@@ -3,9 +3,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import {
-    AppProvider,
-} from '@toolpad/core/AppProvider';
+import { AppProvider } from '@toolpad/core/AppProvider';
+
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
 import AccountSlotsAccountSwitcher from './AccountSlotsAccountSwitcher';
@@ -14,6 +13,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import { PageContainer, PageContainerToolbar } from '@toolpad/core/PageContainer';
 import { orange } from '@mui/material/colors';
+import ProfilePage from './Profile'
+import { useLocation } from 'react-router-dom';
 
 const NAVIGATION = [
     {
@@ -21,6 +22,7 @@ const NAVIGATION = [
         title: 'Dashboard',
         icon: <DashboardIcon />,
     },
+    
 ];
 
 const demoTheme = createTheme({
@@ -62,40 +64,18 @@ function Friendlists() {
 }
 
 function DashboardPageContent({ pathname }) {
-    return (
-        <>
-            <Paper
-                sx={{
-                    p: 2,
-                    width: '100%',
-                    marginTop: 2,
-                    marginLeft: 2,
-                    marginRight: 2,
-                    // bgcolor: orange[500],
-                    color: 'white',
-                    textAlign: 'center'
-                }}
-               
-            >
-                <Typography color='primary' fontSize={25} variant='h2' fontWeight="bold">Welcome DibyaKanti !</Typography>
-            </Paper>
-
-            <Paper sx={{ display: 'flex', gap: 2, mt: 2, marginLeft: 2 }}>
-                <Paper elevation={10} sx={{ p: 2, flex: 1 }}>
-                    <Typography color='primary' variant="h6" fontWeight="bold">Activity Feed</Typography>
-                </Paper>
-
-                <Paper elevation={10} sx={{ p: 2, flex: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-                        <Typography color='primary' variant="h6" fontWeight="bold">Friends List</Typography>
-                        <Search />
-                    </Box>
-                    <Friendlists />
-                </Paper>
-            </Paper>
-
-        </>
-    );
+    console.log(pathname)
+    switch (pathname) {
+        case '/profile':
+            console.log('matched')
+            return(<ProfilePage />)
+             
+            
+    
+        default:
+            break;
+    }
+    
 }
 
 function Search() {
@@ -135,7 +115,8 @@ function Search() {
 }
 
 export default function DashboardLayoutAccount(props) {
-    const { window } = props;
+    const { window, children,} = props;
+    
 
     const [session, setSession] = React.useState({
         user: {
@@ -162,17 +143,15 @@ export default function DashboardLayoutAccount(props) {
         };
     }, []);
 
-    const router = useDemoRouter('/dashboard');
+    //const router = useDemoRouter()
+   
 
-    // Remove this const when copying and pasting into your project.
-    const demoWindow = window !== undefined ? window() : undefined;
+ 
 
     return (
         // preview-start
 
         <AppProvider
-
-            authentication={AccountSlotsAccountSwitcher}
             navigation={NAVIGATION}
             bgcolor = {"#59C7F3"}
             branding={{
@@ -185,12 +164,16 @@ export default function DashboardLayoutAccount(props) {
                 ),
                 title: 'WexaTalk',
             }}
-            router={router}
+            //router={router}
+            window={window}
             theme={demoTheme}
-            window={demoWindow}
+           
+        
+            
         >
-            <DashboardLayout slots={{toolbarAccount: AccountSlotsAccountSwitcher }}>
-                <DashboardPageContent pathname={router.pathname} />
+            <DashboardLayout  slots={{toolbarAccount: AccountSlotsAccountSwitcher }}>
+                {children}
+               
             </DashboardLayout>
         </AppProvider>
         // preview-end

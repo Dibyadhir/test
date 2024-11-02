@@ -20,6 +20,8 @@ import AddIcon from '@mui/icons-material/Add';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import { Person } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const accounts = [
   {
@@ -37,13 +39,14 @@ const accounts = [
 ];
 
 export default function CustomMenu() {
+  const navigation = useNavigate()
   return (
     <Stack direction="column">
       <>
         
-        <MenuItem >
+        <MenuItem onClick={()=>navigation('/profile')} >
           <ListItemIcon>
-            <PersonAdd fontSize="small" />
+            <Person fontSize="small" />
           </ListItemIcon>
           Profile
         </MenuItem>
