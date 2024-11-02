@@ -18,12 +18,17 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useTheme } from '@mui/material/styles';
+import { Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function LoginPage() {
   const theme = useTheme();
   const [showPassword, setShowPassword] = React.useState(false);
+  const [formData, setFormData] = React.useState({email:'', password:''})
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const navigation = useNavigate()
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -31,7 +36,16 @@ export default function LoginPage() {
 
   const handleSignIn = (event) => {
     event.preventDefault();
-    alert("Sign in successful!");
+    //alert("Sign in successful!");
+     axios.post('http://localhost:8000/login', formData)
+            .then(res=>{
+              console.log(res.data)
+              //add data to context
+              navigation('/dashboard')
+             
+            }
+            )
+            .catch(err=>console.log(err))
   };
 
   return (
@@ -111,6 +125,8 @@ export default function LoginPage() {
                 size="small"
                 required
                 fullWidth
+                value={formData.email}
+                onChange={e=>setFormData({...formData,email:e.target.value})}
                 // sx={{ color: 'white', fontWeight: 'bold' }}
                 InputProps={{
                   startAdornment: (
@@ -131,7 +147,9 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   size="small"
-                  sx={{ color: 'white', fontWeight: 'bold' }}
+                  value={formData.password}
+                onInput={e=>setFormData({...formData,password:e.target.value})}
+                 
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton

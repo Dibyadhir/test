@@ -19,6 +19,8 @@ import { Delete } from '@mui/icons-material';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Navbar from './Navbar';
+import DashboardLayoutAccount from './Dashbord';
+import { PageContainer } from '@toolpad/core/PageContainer';
 
 export default function ProfilePage() {
     const [userData, setUserData] = useState({
@@ -61,7 +63,8 @@ export default function ProfilePage() {
 
     return (
         <>
-            <Navbar />
+        <DashboardLayoutAccount>
+          
             <Container maxWidth="lg" >
                 <Paper elevation={3} sx={{ p: 4 }}>
                     <form onSubmit={handleUpdateProfile}>
@@ -126,6 +129,9 @@ export default function ProfilePage() {
                     </form>
                 </Paper>
             </Container>
+            
+            </DashboardLayoutAccount>
+            
         </>
     );
 }

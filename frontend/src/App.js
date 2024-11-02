@@ -10,6 +10,7 @@ import RegisterForm from './components/RegistrationForm';
 import ChatBox from './components/ChatBox';
 import ChatDashboard from './components/ChatDashboard';
 import Navbar from './components/Navbar';
+import DashboardContent from './components/DashboardContent';
 
 // Define the theme with fallback for shadows to avoid the error
 const theme = createTheme({
@@ -22,7 +23,7 @@ function App() {
      
       <Routes>
         <Route path='/login' element={<LoginPage />} />
-        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/dashboard' element={<DashboardContent />} />
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/registorform' element={<RegisterForm />} />
         <Route path='/chatbox' element={<ChatDashboard />} />

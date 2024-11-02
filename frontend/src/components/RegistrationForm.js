@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TextField, Button, Typography, Box, Stepper, Step, StepLabel, Paper } from "@mui/material";
+import axios from "axios";
 
 const steps = [
     "Enter your First Name",
@@ -66,6 +67,9 @@ function RegisterForm() {
         if (activeStep === steps.length - 1 && validateStep()) {
             alert("Registration Successful!");
             // Process form data here
+            axios.post('http://localhost:8000/register', formData)
+            .then(res=>console.log(res.data))
+            .catch(err=>console.log(err.response.data))
         }
     };
 
