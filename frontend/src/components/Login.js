@@ -20,6 +20,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useTheme } from '@mui/material/styles';
 import { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default function LoginPage() {
   const theme = useTheme();
@@ -41,6 +42,7 @@ export default function LoginPage() {
      axios.post('http://localhost:8000/login', formData)
             .then(res=>{
               console.log(res.data)
+              Cookies.set('token', res.data.token)
               //add data to context
               navigation('/dashboard')
              
@@ -48,6 +50,9 @@ export default function LoginPage() {
             )
             .catch(err=>setServerError(err.response.data))
   };
+  if(Cookies.get('token') !== undefined){
+    return <Navigate to="/dashboard" replace={true} />;
+  }
 
   return (
     <Container
