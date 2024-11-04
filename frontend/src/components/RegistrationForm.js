@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Typography, Box, Stepper, Step, StepLabel, Paper } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
     "Enter your First Name",
@@ -20,6 +21,9 @@ function RegisterForm() {
     });
     const [activeStep, setActiveStep] = useState(0);
     const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState('')
+
+    const navigation = useNavigate()
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -65,11 +69,14 @@ function RegisterForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (activeStep === steps.length - 1 && validateStep()) {
-            alert("Registration Successful!");
+            
             // Process form data here
             axios.post('http://localhost:8000/register', formData)
-            .then(res=>console.log(res.data))
-            .catch(err=>console.log(err.response.data))
+            .then(res=>{
+                alert("Registration Successful!");
+                navigation('/login')
+            })
+            .catch(err=>setServerError(err.response.data))
         }
     };
 
@@ -196,6 +203,7 @@ function RegisterForm() {
                         </Button>
                     )}
                 </Paper>
+                {serverError&&<Typography m={1} color="red" textAlign={'center'}>*{serverError}</Typography>}
             </Box>
 
         </Box>
