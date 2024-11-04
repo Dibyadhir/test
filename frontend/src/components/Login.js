@@ -41,7 +41,7 @@ export default function LoginPage() {
      axios.post('http://localhost:8000/login', formData)
             .then(res=>{
               console.log(res.data)
-              //add data to context
+              localStorage.setItem('userId',res.data.info)
               navigation('/dashboard')
              
             }
