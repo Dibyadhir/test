@@ -25,6 +25,7 @@ export default function LoginPage() {
   const theme = useTheme();
   const [showPassword, setShowPassword] = React.useState(false);
   const [formData, setFormData] = React.useState({email:'', password:''})
+  const [serverError, setServerError] = React.useState('')
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -45,7 +46,7 @@ export default function LoginPage() {
              
             }
             )
-            .catch(err=>console.log(err))
+            .catch(err=>setServerError(err.response.data))
   };
 
   return (
@@ -104,7 +105,7 @@ export default function LoginPage() {
               flexDirection: 'column',
               alignItems: 'center',
               borderRadius: 2,
-              height: '340px',
+              height: 'auto',
               // bgcolor: '#0490C8', 
               border: '2px solid ', 
               backdropFilter: 'blur(1px)', 
@@ -178,15 +179,16 @@ export default function LoginPage() {
                 size="medium"
                 disableElevation
                 fullWidth
-                sx={{ my: 2 }}
+                sx={{ my: 1 }}
               >
                 Log In
               </Button>
+              {serverError&&<Typography  color="red" textAlign={'center'}>*{serverError}</Typography>}
               <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Link href="/" variant="body2" >
-                  {"Sign up"}
+                <Link href="/registorform" variant="body2" >
+                  {"Register"}
                 </Link>
-                <Link href="/" variant="body2" sx={{ ml: 2, }}>
+                <Link href="#" variant="body2" sx={{ ml: 2, }}>
                   Forgot password?
                 </Link>
               </Box>
