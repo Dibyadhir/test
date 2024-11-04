@@ -11,7 +11,6 @@ import ChatBox from './components/ChatBox';
 import ChatDashboard from './components/ChatDashboard';
 import Navbar from './components/Navbar';
 import DashboardContent from './components/DashboardContent';
-import Chat from './components/Chat';
 
 // Define the theme with fallback for shadows to avoid the error
 const theme = createTheme({
@@ -27,7 +26,7 @@ function App() {
         <Route path='/dashboard' element={<DashboardContent />} />
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/registorform' element={<RegisterForm />} />
-        <Route path='/chatbox' element={<Chat />} />
+        <Route path='/chatbox' element={<ChatDashboard />} />
       </Routes>
     </BrowserRouter>
 

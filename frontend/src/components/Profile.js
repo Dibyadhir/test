@@ -1,5 +1,5 @@
 // src/ProfileUpdatePage.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Avatar,
     Button,
@@ -24,14 +24,20 @@ import { PageContainer } from '@toolpad/core/PageContainer';
 
 export default function ProfilePage() {
     const [userData, setUserData] = useState({
-        profile_pic: '',
+        pic: '',
         first_name: '',
         last_name: '',
         email: '',
         gender: '',
-        date_of_birth: '',
+        dob: '',
         about_yourself: '',
     });
+
+    useEffect(() => {
+        axios.post('http://localhost:8000/getuser', { userId: localStorage.getItem('userId') })
+            .then(res => setUserData(res.data))
+       
+    }, [])
 
     const handleUserDataChange = (e) => {
         const { name, value } = e.target;
@@ -43,19 +49,20 @@ export default function ProfilePage() {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setUserData({ ...userData, profile_pic: reader.result });
+                setUserData({ ...userData, pic: reader.result });
             };
             reader.readAsDataURL(file);
         } else {
-            setUserData({ ...userData, profile_pic: '' });
+            setUserData({ ...userData, pic: '' });
         }
     };
 
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/updatepersonalinfo', userData);
-            toast.success(response.data.message);
+            const response = await axios.post('http://localhost:8000/updatepersonalinfo', userData);
+            alert('Profile updated succssfully')
+            //toast.success(response.data.message);
         } catch (error) {
             toast.error(error.response?.data?.message || 'Error updating profile');
         }
@@ -69,13 +76,13 @@ export default function ProfilePage() {
                 <Paper elevation={3} sx={{ p: 4 }}>
                     <form onSubmit={handleUpdateProfile}>
                         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <Avatar src={userData.profile_pic} sx={{ width: 100, height: 100 }} />
+                            <Avatar src={userData.pic} sx={{ width: 100, height: 100 }} />
                             <Button component="label" size="small" sx={{ mt: 2 }}>
                                 Upload Profile
                                 <input type="file" hidden accept="image/png, image/jpeg" onChange={handleCapture} />
                             </Button>
-                            {userData.profile_pic && (
-                                <IconButton size="small" color="error" onClick={() => setUserData({ ...userData, profile_pic: '' })}>
+                            {userData.pic && (
+                                <IconButton size="small" color="error" onClick={() => setUserData({ ...userData, pic: '' })}>
                                     <Delete />
                                 </IconButton>
                             )}
@@ -100,7 +107,8 @@ export default function ProfilePage() {
                                     type={'email'}
                                     label="Email"
                                     value={userData.email}
-                                // disabled
+                                    disabled
+                     
                                 />
                             </FormControl>
                             <Stack spacing={2}>
@@ -112,10 +120,18 @@ export default function ProfilePage() {
                                             <MenuItem value='female'>Female</MenuItem>
                                         </Select>
                                     </FormControl>
-                                    <FormControl fullWidth variant="outlined">
-                                        <InputLabel size="small" required >Date of Birth</InputLabel>
-                                        <OutlinedInput size="small" value={userData.date_of_birth} name="Date of Birth" required={true} type={"text"} label="Date of Birth" />
-                                    </FormControl>
+                                    <TextField
+                                    type='date'
+                                    label='Date of birth'
+                                    fullWidth
+                                    required
+                                    size='small'
+                                    name='dob'
+                                    value={userData.dob}
+                                    InputLabelProps={{ shrink: true }}
+                                    onChange={handleUserDataChange}
+
+                                    />
                                 </Stack>
                                 <FormControl fullWidth variant="outlined">
                                 <InputLabel size="small"  >About Yourself</InputLabel>
